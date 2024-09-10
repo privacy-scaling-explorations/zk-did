@@ -1,0 +1,11 @@
+{
+  "name": "zk-did-project",
+  "description": "Universal zero-knowledge verifiers powered by DIDs.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.4.1",
+  "devDependencies": {
+    "hardhat": "^2.22.10"
+  }
+}
