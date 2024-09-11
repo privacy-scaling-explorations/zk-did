@@ -14,3 +14,5 @@ template AgeAbove18 () {
 
     isAbove18 <== LessThan(8)([current - dob, 18 * 12]);
 }
+
+component main { public [currentDateMonth, currentDateYear] } = AgeAbove18();
