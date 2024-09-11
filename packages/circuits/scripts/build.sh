@@ -6,7 +6,7 @@ BUILD_DIR="$(pwd)/build"
 PTAU="powersOfTau28_hez_final_08.ptau"
 PTAU_PATH="$BUILD_DIR/$PTAU"
 CONTRACTS_DIR="$(pwd)/../contracts/src"
-JS_BUILD_DIR="$BUILD_DIR/aadhaar-verifier_js"
+JS_BUILD_DIR="$BUILD_DIR/main_js"
 PARTIAL_ZKEYS_DIR="$BUILD_DIR/partial_zkeys"
 ARTIFACTS_DIR="$(pwd)/artifacts"
 CIRCOM_BIN_DIR="$HOME/.cargo/bin/circom"
@@ -90,27 +90,6 @@ function setup_contract() {
     sed -i '' -e "s/contract Groth16Verifier/contract Verifier/g" "$BUILD_DIR"/contracts/Verifier.sol
     cp "$BUILD_DIR"/contracts/Verifier.sol "$CONTRACTS_DIR"
     echo "Contracts generated!"
-}
-
-function generate_witness() {
-    echo "Gen witness..."
-    QR_DATA=$QR_DATA npx ts-node ./scripts/generateInput.ts
-    node "$JS_BUILD_DIR"/generate_witness.js "$JS_BUILD_DIR"/aadhaar-verifier.wasm  "$BUILD_DIR"/input.json "$BUILD_DIR"/witness.wtns
-    echo "Done!"
-}
-
-function generate_proof() {
-    echo "Building proof...!"
-    mkdir -p "$BUILD_DIR"/proofs
-
-    NODE_OPTIONS='--max-old-space-size=8192' $SNARKJS_PATH groth16 prove "$PARTIAL_ZKEYS_DIR"/circuit_final.zkey "$BUILD_DIR"/witness.wtns "$BUILD_DIR"/proofs/proof.json "$BUILD_DIR"/proofs/public.json
-    echo "Generated proof...!"
-
-}
-
-function verify_proof() {
-    NODE_OPTIONS='--max-old-space-size=8192' $SNARKJS_PATH groth16 verify "$BUILD_DIR"/vkey.json "$BUILD_DIR"/proofs/public.json "$BUILD_DIR"/proofs/proof.json
-    echo "Verify proof...!"
 }
 
 case "$1" in
